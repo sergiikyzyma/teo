@@ -1,0 +1,4 @@
+pyqt5 = 5.14.1
+pyqt6 = 6.5.0 from python3 11.0 or newer
+pyside2 = 5.15.2.1 to python3 10.0 or older
+pyside6 = 6.2.4
