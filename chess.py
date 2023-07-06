@@ -5,7 +5,7 @@ import sys, datetime, random, os, pickle
 #from PySide2.QtCore import Qt, QRect, QPoint, QSize
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QOpenGLWidget, QLabel, QPushButton, QLineEdit, QTextEdit, QComboBox, QGroupBox, QMenuBar, QMenu, QDialog, QListWidget, QMessageBox
 from PyQt5.QtGui import QPalette, QColor, QBrush, QPen, QFont, QPainter, QImage
-from PyQt5.QtCore import Qt, QRect, QPoint, QSize
+from PyQt5.QtCore import Qt, QRect, QPoint, QSize, QRectF, QPointF, QSizeF
 
 tColumn = ("A", "B", "C", "D", "E", "F", "G", "H")
 tRow = (1, 2, 3, 4, 5, 6, 7, 8)
@@ -86,18 +86,16 @@ class King(Chessman):
         if self.dataColour == Qt.white:
             qp.setPen(QPen(Qt.cyan, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "Kg")
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             image.invertPixels()
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
         elif self.dataColour == Qt.black:
             qp.setPen(QPen(Qt.blue, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "Kg")
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
     def isMoveRight(self, oldColumn, oldRow, newColumn, newRow):
-        if (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 1) or (abs(tRow.index(oldRow) - tRow.index(newRow)) == 1):
+        if (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 1 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 0) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 0 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 1) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 1 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 1):
             return True
         else:
             return False
@@ -112,18 +110,20 @@ class Queen(Chessman):
         if self.dataColour == Qt.white:
             qp.setPen(QPen(Qt.cyan, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "Q")
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             image.invertPixels()
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
         elif self.dataColour == Qt.black:
             qp.setPen(QPen(Qt.blue, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "Q")
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
     def isMoveRight(self, oldColumn, oldRow, newColumn, newRow):
-        if ((oldColumn != newColumn and oldRow != newRow) or (oldColumn == newColumn and oldRow != newRow) or (oldColumn != newColumn and oldRow == newRow)) and not(((abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 1) and (abs(tRow.index(oldRow) - tRow.index(newRow)) == 2)) or ((abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 2) and (abs(tRow.index(oldRow) - tRow.index(newRow)) == 1))):
+        #if list(filter(lambda x: x==True, [(abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == i and abs(tRow.index(oldRow) - tRow.index(newRow)) == i)  or (oldColumn == newColumn and oldRow != newRow) or (oldColumn != newColumn and oldRow == newRow) for i in range(1, 8)])):
+        #    return True
+        #else:
+        #    return False
+        if ((abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 1 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 1) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 2 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 2) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 3 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 3) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 4 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 4) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 5 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 5) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 6 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 6) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 7 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 7) or (oldColumn == newColumn and oldRow != newRow) or (oldColumn != newColumn and oldRow == newRow)):
             return True
         else:
             return False
@@ -169,18 +169,20 @@ class Bishop(Chessman):
         if self.dataColour == Qt.white:
             qp.setPen(QPen(Qt.cyan, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "B")
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             image.invertPixels()
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
         elif self.dataColour == Qt.black:
             qp.setPen(QPen(Qt.blue, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "B")
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
     def isMoveRight(self, oldColumn, oldRow, newColumn, newRow):
-        if (oldColumn != newColumn and oldRow != newRow) and not (((abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 1) and (abs(tRow.index(oldRow) - tRow.index(newRow)) == 2)) or ((abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 2) and (abs(tRow.index(oldRow) - tRow.index(newRow)) == 1))):
+        #if list(filter(lambda x: x==True, [abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == i and abs(tRow.index(oldRow) - tRow.index(newRow)) == i for i in range(1, 8)])):
+        #    return True
+        #else:
+        #    return False
+        if (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 1 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 1) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 2 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 2) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 3 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 3) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 4 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 4) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 5 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 5) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 6 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 6) or (abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 7 and abs(tRow.index(oldRow) - tRow.index(newRow)) == 7):
             return True
         else:
             return False
@@ -210,15 +212,13 @@ class Castle(Chessman):
         if self.dataColour == Qt.white:
             qp.setPen(QPen(Qt.cyan, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "C")
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             image.invertPixels()
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
         elif self.dataColour == Qt.black:
             qp.setPen(QPen(Qt.blue, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "C")
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
     def isMoveRight(self, oldColumn, oldRow, newColumn, newRow):
         if (oldColumn == newColumn and oldRow != newRow) or (oldColumn != newColumn and oldRow == newRow):
@@ -254,15 +254,13 @@ class Knight(Chessman):
         if self.dataColour == Qt.white:
             qp.setPen(QPen(Qt.cyan, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "K")
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             image.invertPixels()
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
         elif self.dataColour == Qt.black:
             qp.setPen(QPen(Qt.blue, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "K")
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
     def isMoveRight(self, oldColumn, oldRow, newColumn, newRow):
         if ((abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 1) and (abs(tRow.index(oldRow) - tRow.index(newRow)) == 2)) or ((abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 2) and (abs(tRow.index(oldRow) - tRow.index(newRow)) == 1)):
@@ -280,15 +278,13 @@ class Pawn(Chessman):
         if self.dataColour == Qt.white:
             qp.setPen(QPen(Qt.cyan, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "P")
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             image.invertPixels()
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
         elif self.dataColour == Qt.black:
             qp.setPen(QPen(Qt.blue, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "P")
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
     def isMoveRight(self, oldColumn, oldRow, newColumn, newRow):
         if (((abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 0) and (tRow.index(oldRow) - tRow.index(newRow) == -1)) and (self.dataColour == Qt.white)) or (((abs(tColumn.index(oldColumn) - tColumn.index(newColumn)) == 0) and (tRow.index(oldRow) - tRow.index(newRow) == -2) and (oldRow == 2)) and (self.dataColour == Qt.white)):
@@ -304,6 +300,17 @@ class Pawn(Chessman):
             return True
         else:
             return False
+    def isJumpRight(self, column, row, find):
+        column_index = tColumn.index(column)
+        row_index = tRow.index(row)
+        if abs(row_index - tRow.index(self.dataRow)) == 2:
+            if row_index < tRow.index(self.dataRow):
+                row_index += 1
+            else:
+                row_index -= 1
+            if find(tColumn[column_index], tRow[row_index]) != None:
+                return False
+        return True
 
 
 class Chess(QWidget):
@@ -315,6 +322,8 @@ class Chess(QWidget):
         self.step_white = []
         self.step_black = []
         self.stepsChessmans = []
+        self.AI_White = False
+        self.AI_Black = False
         self.setWindowTitle("The chess")
         self.setFixedSize(800, 800)
         menubar = QMenuBar(self)
@@ -329,10 +338,11 @@ class Chess(QWidget):
         menu1.addSeparator()
         menu1.addAction("Exit", lambda: self.exit())
         menubar.addMenu(menu1)
-        menu2 = QMenu("Step of the whiteside", self)
-        menu2.addAction("Menu #1")
-        menu2.addAction("Menu #2")
-        menu2.addAction("Menu #3")
+        menu2 = QMenu("Choice AI for...", self)
+        menu2.addAction("Nothing", lambda: self.ai_nothing())
+        menu2.addAction("Steps on the whiteside", lambda: self.ai_white())
+        menu2.addAction("Steps on the blackside", lambda: self.ai_black())
+        menu2.addAction("Both", lambda: self.ai_both())
         menubar.addMenu(menu2)
         menu3 = QMenu("Step of the blackside", self)
         menu3.addAction("Menu #1")
@@ -454,6 +464,47 @@ class Chess(QWidget):
     def exit(self):
         self.close()
 
+    def ai_nothing(self):
+        self.AI_White = False
+        self.AI_Black = False
+
+    def ai_white(self):
+        self.AI_White = True
+        self.AI_Black = False
+
+    def ai_black(self):
+        self.AI_White = False
+        self.AI_Black = True
+
+    def ai_both(self):
+        self.AI_White = True
+        self.AI_Black = True
+
+    def ai_steping(self, qp, chessman):
+        mychessman_ai = random.choice(chessman)
+        #if mychessman_ai != None and self.stepsChessmans != [] and mychessman_ai.dataColour != self.stepsChessmans[-1].dataColour:
+        #    while True:
+        #        column_ai = random.choice(tColumn)
+        #        row_ai = random.choice(tRow)
+        #        result_ai = self.find(column_ai, row_ai)
+        #        if (mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isAttackRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai)) or (mychessman_ai.__name__ == "Pawn" and result_ai == None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (mychessman_ai.__name__ != "Pawn" and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)):
+        #            break
+        #        if mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find):
+        #            mychessman_ai = random.choice(chessman)
+        #    print(f"{mychessman_ai} {mychessman_ai.dataColour}: {column_ai} - {row_ai}")
+        #    self.move(qp, mychessman_ai, column_ai, row_ai)
+        #elif mychessman_ai != None and self.stepsChessmans == [] and mychessman_ai.dataColour == Qt.white:
+        while True:
+            column_ai = random.choice(tColumn)
+            row_ai = random.choice(tRow)
+            result_ai = self.find(column_ai, row_ai)
+            if (mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isAttackRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai)) or (mychessman_ai.__name__ == "Pawn" and result_ai == None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (mychessman_ai.__name__ != "Pawn" and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)):
+                break
+            if mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find):
+                mychessman_ai = random.choice(chessman)
+        print(f"{mychessman_ai} {mychessman_ai.dataColour}: {column_ai} - {row_ai}")
+        self.move(qp, mychessman_ai, column_ai, row_ai)
+
     def help(self):
         box = QMessageBox(self)
         box.setWindowTitle("Hello my dear")
@@ -485,6 +536,8 @@ class Chess(QWidget):
         self.drawcounter(qp)
         for mychessman in self.dataChessmans:
             mychessman.display(qp, self.getCoordX, self.getCoordY)
+        mychessman_white = [i for i in self.dataChessmans if i.dataColour == Qt.white]
+        mychessman_black = [i for i in self.dataChessmans if i.dataColour == Qt.black]
         column_press = self.setCoordX(self.press_pos.x())
         row_press = self.setCoordY(self.press_pos.y())
         column_release = self.setCoordX(self.release_pos.x())
@@ -494,6 +547,13 @@ class Chess(QWidget):
             self.move(qp, result_press, column_release, row_release)
         elif result_press != None and self.stepsChessmans == [] and result_press.dataColour == Qt.white:
             self.move(qp, result_press, column_release, row_release)
+        elif result_press == None and self.AI_White and not self.AI_Black:
+            self.ai_steping(qp, mychessman_white)
+        elif result_press == None and not self.AI_White and self.AI_Black:
+            self.ai_steping(qp, mychessman_black)
+        elif result_press == None and self.AI_White and self.AI_Black:
+            self.ai_steping(qp, mychessman_white)
+            self.ai_steping(qp, mychessman_black)
         else:
             Chessman("A", 1, Qt.white).errorMessage(qp, self.getCoordX, self.getCoordY, f"Waiting next step")
 
@@ -512,7 +572,6 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
-                #self.step_black.append(result_press.move(qp, column_release, row_release, self))
             # -------The moving white chessman-------
             elif result_press.dataColour == Qt.white:
                 if result_press.isMoveRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
@@ -525,7 +584,6 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
-                #self.step_white.append(result_press.move(qp, column_release, row_release, self))
         elif result_press != None and result_release != None and result_press.dataColour != result_release.dataColour and result_press.isJumpRight(column_release, row_release, self.find):
             # -------The fighting black chessman-------
             if (result_press.dataColour == Qt.black) and (result_press.__name__ != "Pawn"):
@@ -541,7 +599,6 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
-                #self.step_black.append(result_press.move(qp, column_release, row_release, self))
             elif (result_press.dataColour == Qt.black) and (result_press.__name__ == "Pawn"):
                 if result_press.isAttackRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
                     self.dataChessmans.remove(result_release)
@@ -555,7 +612,6 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
-                #self.step_black.append(result_press.move(qp, column_release, row_release, self))
             # -------The fighting white chessman-------
             elif (result_press.dataColour == Qt.white) and (result_press.__name__ != "Pawn"):
                 if result_press.isMoveRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
@@ -583,12 +639,22 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
-            #if result_press.dataColour == Qt.black:
-            #    self.step_black.append(result_press.move(qp, column_release, row_release, self))
-            #elif result_press.dataColour == Qt.white:
-            #    self.step_white.append(result_press.move(qp, column_release, row_release, self))
         elif result_press != None and not(result_press.isJumpRight(column_release, row_release, self.find)):
             result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\nThis chessman can't jumping over other chessmans\n")
+        if result_press.__name__ == "Pawn" and result_press.dataColour == Qt.white and result_press.dataRow == 8:
+            new_result_press = random.choice([Queen(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Bishop(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Castle(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Knight(result_press.dataColumn, result_press.dataRow, result_press.dataColour)])
+            self.dataChessmans.remove(result_press)
+            result_press.__del__()
+            self.dataChessmans.append(new_result_press)
+            new_result_press.display(qp, self.getCoordX, self.getCoordY)
+            self.update()
+        if result_press.__name__ == "Pawn" and result_press.dataColour == Qt.black and result_press.dataRow == 1:
+            new_result_press = random.choice([Queen(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Bishop(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Castle(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Knight(result_press.dataColumn, result_press.dataRow, result_press.dataColour)])
+            self.dataChessmans.remove(result_press)
+            result_press.__del__()
+            self.dataChessmans.append(new_result_press)
+            new_result_press.display(qp, self.getCoordX, self.getCoordY)
+            self.update()
 
     def drawfield(self, qp, column, row):
         oldPen = qp.pen()

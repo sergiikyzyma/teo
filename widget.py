@@ -4,7 +4,7 @@ import sys, datetime, random, os, pickle
 from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QOpenGLWidget, QLabel, QPushButton, QLineEdit, QTextEdit, QComboBox, QGroupBox, QMenuBar, QMenu, QDialog, QListWidget, QMessageBox
 from PyQt5.QtGui import QPalette, QColor, QBrush, QPen, QFont, QPainter
 from PyQt5.QtCore import Qt
-#from PyQt5.QtOpenGL import QGLWidget
+from PyQt5.QtOpenGL import QGLWidget
 #from PySide6.QtGui import QPalette, QColor, QBrush, QPen, QFont, QPainter, QOpenGLFunctions
 #from PySide6.QtCore import Qt
 #from PySide6.QtOpenGL import QGLWidget
@@ -54,7 +54,7 @@ class GLWidget(QWidget):
         pass
 
 
-class Widget(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self, folder):
         super().__init__()
         self.package = list()
@@ -326,7 +326,7 @@ class Widget(QMainWindow):
 if __name__ == "__main__":
     folder = "C:\\Users\\Teosoph\\Documents\\My Games"
     app = QApplication([])
-    window = Widget(folder)
+    window = MainWindow(folder)
     window.setWindowTitle("Moja Applikacja")
     window.setFixedSize(1000, 1000)
     window.show()
