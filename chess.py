@@ -482,28 +482,26 @@ class Chess(QWidget):
 
     def ai_steping(self, qp, chessman):
         mychessman_ai = random.choice(chessman)
-        #if mychessman_ai != None and self.stepsChessmans != [] and mychessman_ai.dataColour != self.stepsChessmans[-1].dataColour:
-        #    while True:
-        #        column_ai = random.choice(tColumn)
-        #        row_ai = random.choice(tRow)
-        #        result_ai = self.find(column_ai, row_ai)
-        #        if (mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isAttackRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai)) or (mychessman_ai.__name__ == "Pawn" and result_ai == None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (mychessman_ai.__name__ != "Pawn" and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)):
-        #            break
-        #        if mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find):
-        #            mychessman_ai = random.choice(chessman)
-        #    print(f"{mychessman_ai} {mychessman_ai.dataColour}: {column_ai} - {row_ai}")
-        #    self.move(qp, mychessman_ai, column_ai, row_ai)
-        #elif mychessman_ai != None and self.stepsChessmans == [] and mychessman_ai.dataColour == Qt.white:
-        while True:
-            column_ai = random.choice(tColumn)
-            row_ai = random.choice(tRow)
-            result_ai = self.find(column_ai, row_ai)
-            if (mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isAttackRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai)) or (mychessman_ai.__name__ == "Pawn" and result_ai == None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (mychessman_ai.__name__ != "Pawn" and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)):
-                break
-            if mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find):
-                mychessman_ai = random.choice(chessman)
-        print(f"{mychessman_ai} {mychessman_ai.dataColour}: {column_ai} - {row_ai}")
-        self.move(qp, mychessman_ai, column_ai, row_ai)
+        if mychessman_ai != None and self.stepsChessmans != [] and mychessman_ai.dataColour != self.stepsChessmans[-1].dataColour:
+            while True:
+                column_ai = random.choice(tColumn)
+                row_ai = random.choice(tRow)
+                result_ai = self.find(column_ai, row_ai)
+                if (mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isAttackRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai)) or (mychessman_ai.__name__ == "Pawn" and result_ai == None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (mychessman_ai.__name__ != "Pawn" and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)):
+                    break
+                if mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find):
+                    mychessman_ai = random.choice(chessman)
+            self.move(qp, mychessman_ai, column_ai, row_ai)
+        elif mychessman_ai != None and self.stepsChessmans == [] and mychessman_ai.dataColour == Qt.white:
+            while True:
+                column_ai = random.choice(tColumn)
+                row_ai = random.choice(tRow)
+                result_ai = self.find(column_ai, row_ai)
+                if (mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isAttackRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai)) or (mychessman_ai.__name__ == "Pawn" and result_ai == None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (mychessman_ai.__name__ != "Pawn" and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)):
+                    break
+                if mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find):
+                    mychessman_ai = random.choice(chessman)
+            self.move(qp, mychessman_ai, column_ai, row_ai)
 
     def help(self):
         box = QMessageBox(self)
@@ -547,11 +545,11 @@ class Chess(QWidget):
             self.move(qp, result_press, column_release, row_release)
         elif result_press != None and self.stepsChessmans == [] and result_press.dataColour == Qt.white:
             self.move(qp, result_press, column_release, row_release)
-        elif result_press == None and self.AI_White and not self.AI_Black:
+        elif result_press == None and self.AI_White and not self.AI_Black and mychessman_white != []:
             self.ai_steping(qp, mychessman_white)
-        elif result_press == None and not self.AI_White and self.AI_Black:
+        elif result_press == None and not self.AI_White and self.AI_Black and mychessman_black != []:
             self.ai_steping(qp, mychessman_black)
-        elif result_press == None and self.AI_White and self.AI_Black:
+        elif result_press == None and self.AI_White and self.AI_Black and mychessman_white != [] and mychessman_black != []:
             self.ai_steping(qp, mychessman_white)
             self.ai_steping(qp, mychessman_black)
         else:
@@ -560,7 +558,7 @@ class Chess(QWidget):
     def move(self, qp, result_press, column_release, row_release):
         result_release = self.find(column_release, row_release)
         if result_press != None and result_release == None and result_press.isJumpRight(column_release, row_release, self.find):
-            # -------The moving black chessman-------
+            #-------The moving black chessman-------
             if result_press.dataColour == Qt.black:
                 if result_press.isMoveRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
                     self.step_black.append(str(self.output_step_black.count()) + " - " + result_press.moveCounter(qp, result_press.dataColumn, result_press.dataRow, column_release, row_release))
@@ -572,7 +570,7 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
-            # -------The moving white chessman-------
+            #-------The moving white chessman-------
             elif result_press.dataColour == Qt.white:
                 if result_press.isMoveRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
                     self.step_white.append(str(self.output_step_white.count()) + " - " + result_press.moveCounter(qp, result_press.dataColumn, result_press.dataRow, column_release, row_release))
@@ -585,7 +583,7 @@ class Chess(QWidget):
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
         elif result_press != None and result_release != None and result_press.dataColour != result_release.dataColour and result_press.isJumpRight(column_release, row_release, self.find):
-            # -------The fighting black chessman-------
+            #-------The fighting black chessman-------
             if (result_press.dataColour == Qt.black) and (result_press.__name__ != "Pawn"):
                 if result_press.isMoveRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
                     self.dataChessmans.remove(result_release)
@@ -612,7 +610,7 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
-            # -------The fighting white chessman-------
+            #-------The fighting white chessman-------
             elif (result_press.dataColour == Qt.white) and (result_press.__name__ != "Pawn"):
                 if result_press.isMoveRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
                     self.dataChessmans.remove(result_release)
@@ -639,6 +637,8 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
+        elif result_press != None and result_release != None and result_press.dataColour == result_release.dataColour and result_press.isJumpRight(column_release, row_release, self.find):
+            self.update()
         elif result_press != None and not(result_press.isJumpRight(column_release, row_release, self.find)):
             result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\nThis chessman can't jumping over other chessmans\n")
         if result_press.__name__ == "Pawn" and result_press.dataColour == Qt.white and result_press.dataRow == 8:
