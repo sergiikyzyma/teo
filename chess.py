@@ -35,15 +35,13 @@ class Chessman():
         if self.dataColour == Qt.white:
             qp.setPen(QPen(Qt.cyan, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "CM")
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             image.invertPixels()
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
         elif self.dataColour == Qt.black:
             qp.setPen(QPen(Qt.blue, Qt.SolidPattern))
             qp.setFont(QFont("times", 16))
-            #qp.drawText(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8, Qt.AlignCenter, "CM")
-            #qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.transformed(QTransform.scale(QTransform(), 1, 0.5)))
+            qp.drawText(QRectF(getCoordX(self.dataColumn), getCoordY(self.dataRow), getCoordX("H") / 8, getCoordY(1) / 8), Qt.AlignCenter, self.__name__)
             qp.drawImage(getCoordX(self.dataColumn), getCoordY(self.dataRow), image.smoothScaled(int(getCoordX("H") / 8), int(getCoordY(1) / 8)))
     def isMoveRight(self, column1, row1, column2, row2):
         return True
@@ -368,7 +366,7 @@ class Chess(QWidget):
         self.output_step_black.setFont(QFont("times", 14))
 
     def new_game(self):
-        #white chessmans
+        # -------white chessmans-------
         WKg = King("E", 1, Qt.white)
         WQ = Queen("D", 1, Qt.white)
         WB1 = Bishop("C", 1, Qt.white)
@@ -385,7 +383,7 @@ class Chess(QWidget):
         WP6 = Pawn("F", 2, Qt.white)
         WP7 = Pawn("G", 2, Qt.white)
         WP8 = Pawn("H", 2, Qt.white)
-        #black chessmans
+        # -------black chessmans-------
         BKg = King("E", 8, Qt.black)
         BQ = Queen("D", 8, Qt.black)
         BB1 = Bishop("C", 8, Qt.black)
@@ -402,11 +400,11 @@ class Chess(QWidget):
         BP6 = Pawn("F", 7, Qt.black)
         BP7 = Pawn("G", 7, Qt.black)
         BP8 = Pawn("H", 7, Qt.black)
-        #CM1 = Chessman("A", 4, Qt.white)
-        #CM2 = Chessman("A", 5, Qt.black)
-        #CM3 = Chessman("B", 4, Qt.white)
-        #CM4 = Chessman("B", 5, Qt.black)
-        #CM5 = Chessman("C", 4, Qt.black)
+        # CM1 = Chessman("A", 4, Qt.white)
+        # CM2 = Chessman("A", 5, Qt.black)
+        # CM3 = Chessman("B", 4, Qt.white)
+        # CM4 = Chessman("B", 5, Qt.black)
+        # CM5 = Chessman("C", 4, Qt.black)
         self.dataChessmans = [WKg, WQ, WB1, WB2, WC1, WC2, WK1, WK2, WP1, WP2, WP3, WP4, WP5, WP6, WP7, WP8, BKg, BQ, BB1, BB2, BC1, BC2, BK1, BK2, BP1, BP2, BP3, BP4, BP5, BP6, BP7, BP8]
         self.step_white, self.step_black = [], []
         self.stepsChessmans = []
@@ -487,7 +485,7 @@ class Chess(QWidget):
                 column_ai = random.choice(tColumn)
                 row_ai = random.choice(tRow)
                 result_ai = self.find(column_ai, row_ai)
-                if (mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isAttackRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai)) or (mychessman_ai.__name__ == "Pawn" and result_ai == None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (mychessman_ai.__name__ != "Pawn" and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)):
+                if (mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isAttackRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai)) or (mychessman_ai.__name__ == "Pawn" and result_ai == None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (mychessman_ai.__name__ != "Pawn" and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (result_ai != None and mychessman_ai.__name__ == "King" and result_ai.__name__ == "Castle" and (result_ai.dataColumn == "H" or result_ai.dataColumn == "A") and (result_ai.dataRow == "1" or result_ai.dataRow == "8")):
                     break
                 if mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find):
                     mychessman_ai = random.choice(chessman)
@@ -497,7 +495,7 @@ class Chess(QWidget):
                 column_ai = random.choice(tColumn)
                 row_ai = random.choice(tRow)
                 result_ai = self.find(column_ai, row_ai)
-                if (mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isAttackRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai)) or (mychessman_ai.__name__ == "Pawn" and result_ai == None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (mychessman_ai.__name__ != "Pawn" and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)):
+                if (mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isAttackRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai)) or (mychessman_ai.__name__ == "Pawn" and result_ai == None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (mychessman_ai.__name__ != "Pawn" and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find)) or (result_ai != None and mychessman_ai.__name__ == "King" and result_ai.__name__ == "Castle") and (result_ai.dataColumn == "H" or result_ai.dataColumn == "A") and (result_ai.dataRow == "1" or result_ai.dataRow == "8"):
                     break
                 if mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find):
                     mychessman_ai = random.choice(chessman)
@@ -558,7 +556,7 @@ class Chess(QWidget):
     def move(self, qp, result_press, column_release, row_release):
         result_release = self.find(column_release, row_release)
         if result_press != None and result_release == None and result_press.isJumpRight(column_release, row_release, self.find):
-            #-------The moving black chessman-------
+            # -------The moving black chessman-------
             if result_press.dataColour == Qt.black:
                 if result_press.isMoveRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
                     self.step_black.append(str(self.output_step_black.count()) + " - " + result_press.moveCounter(qp, result_press.dataColumn, result_press.dataRow, column_release, row_release))
@@ -570,7 +568,7 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
-            #-------The moving white chessman-------
+            # -------The moving white chessman-------
             elif result_press.dataColour == Qt.white:
                 if result_press.isMoveRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
                     self.step_white.append(str(self.output_step_white.count()) + " - " + result_press.moveCounter(qp, result_press.dataColumn, result_press.dataRow, column_release, row_release))
@@ -583,8 +581,8 @@ class Chess(QWidget):
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
         elif result_press != None and result_release != None and result_press.dataColour != result_release.dataColour and result_press.isJumpRight(column_release, row_release, self.find):
-            #-------The fighting black chessman-------
-            if (result_press.dataColour == Qt.black) and (result_press.__name__ != "Pawn"):
+            # -------The fighting black chessman-------
+            if result_press.dataColour == Qt.black and result_press.__name__ != "Pawn":
                 if result_press.isMoveRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
                     self.dataChessmans.remove(result_release)
                     result_release.__del__()
@@ -597,7 +595,7 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
-            elif (result_press.dataColour == Qt.black) and (result_press.__name__ == "Pawn"):
+            elif result_press.dataColour == Qt.black and result_press.__name__ == "Pawn":
                 if result_press.isAttackRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
                     self.dataChessmans.remove(result_release)
                     result_release.__del__()
@@ -610,8 +608,8 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
-            #-------The fighting white chessman-------
-            elif (result_press.dataColour == Qt.white) and (result_press.__name__ != "Pawn"):
+            # -------The fighting white chessman-------
+            elif result_press.dataColour == Qt.white and result_press.__name__ != "Pawn":
                 if result_press.isMoveRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
                     self.dataChessmans.remove(result_release)
                     result_release.__del__()
@@ -624,7 +622,7 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
-            elif (result_press.dataColour == Qt.white) and (result_press.__name__ == "Pawn"):
+            elif result_press.dataColour == Qt.white and result_press.__name__ == "Pawn":
                 if result_press.isAttackRight(result_press.dataColumn, result_press.dataRow, column_release, row_release):
                     self.dataChessmans.remove(result_release)
                     result_release.__del__()
@@ -638,6 +636,54 @@ class Chess(QWidget):
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
         elif result_press != None and result_release != None and result_press.dataColour == result_release.dataColour and result_press.isJumpRight(column_release, row_release, self.find):
+            if result_press.__name__ == "King" and result_release.__name__ == "Castle":
+                column1_index = tColumn.index(result_press.dataColumn)
+                column2_index = tColumn.index(column_release)
+                if result_release.dataColour == Qt.black and result_release.dataColumn == "H" and self.find(tColumn[column2_index-1], row_release) == None and self.find(tColumn[column1_index+1], row_release) == None:
+                    self.step_black.append(str(self.output_step_white.count()-1) + " - " + result_press.__name__ + " - " + result_release.__name__)
+                    self.output_step_black.addItem(str(self.output_step_white.count()-1) + " - " + result_press.__name__ + " - " + result_release.__name__)
+                    self.stepsChessmans.append(result_press)
+                    self.stepsChessmans.append(result_release)
+                    result_press.dataColumn = tColumn[column2_index-1]
+                    result_press.dataRow = row_release
+                    result_press.display(qp, self.getCoordX, self.getCoordY)
+                    result_release.dataColumn = tColumn[column1_index+1]
+                    result_release.dataRow = row_release
+                    result_release.display(qp, self.getCoordX, self.getCoordY)
+                elif result_release.dataColour == Qt.white and result_release.dataColumn == "H" and self.find(tColumn[column2_index-1], row_release) == None and self.find(tColumn[column1_index+1], row_release) == None:
+                    self.step_white.append(str(self.output_step_white.count()) + " - " + result_press.__name__ + " - " + result_release.__name__)
+                    self.output_step_white.addItem(str(self.output_step_white.count()) + " - " + result_press.__name__ + " - " + result_release.__name__)
+                    self.stepsChessmans.append(result_press)
+                    self.stepsChessmans.append(result_release)
+                    result_press.dataColumn = tColumn[column2_index-1]
+                    result_press.dataRow = row_release
+                    result_press.display(qp, self.getCoordX, self.getCoordY)
+                    result_release.dataColumn = tColumn[column1_index+1]
+                    result_release.dataRow = row_release
+                    result_release.display(qp, self.getCoordX, self.getCoordY)
+                elif result_release.dataColour == Qt.black and result_release.dataColumn == "A" and self.find(tColumn[column2_index+1], row_release) == None and self.find(tColumn[column1_index-1], row_release) == None and self.find(tColumn[column2_index+2], row_release) == None:
+                    self.step_black.append(str(self.output_step_white.count()-1) + " - " + result_press.__name__ + " - " + result_release.__name__)
+                    self.output_step_black.addItem(str(self.output_step_white.count()-1) + " - " + result_press.__name__ + " - " + result_release.__name__)
+                    self.stepsChessmans.append(result_press)
+                    self.stepsChessmans.append(result_release)
+                    result_press.dataColumn = tColumn[column2_index+1]
+                    result_press.dataRow = row_release
+                    result_press.display(qp, self.getCoordX, self.getCoordY)
+                    result_release.dataColumn = tColumn[column1_index-1]
+                    result_release.dataRow = row_release
+                    result_release.display(qp, self.getCoordX, self.getCoordY)
+                elif result_release.dataColour == Qt.white and result_release.dataColumn == "A" and self.find(tColumn[column2_index+1], row_release) == None and self.find(tColumn[column1_index-1], row_release) == None and self.find(tColumn[column2_index+2], row_release) == None:
+                    self.step_white.append(str(self.output_step_white.count()) + " - " + result_press.__name__ + " - " + result_release.__name__)
+                    self.output_step_white.addItem(str(self.output_step_white.count()) + " - " + result_press.__name__ + " - " + result_release.__name__)
+                    self.stepsChessmans.append(result_press)
+                    self.stepsChessmans.append(result_release)
+                    result_press.dataColumn = tColumn[column2_index+1]
+                    result_press.dataRow = row_release
+                    result_press.display(qp, self.getCoordX, self.getCoordY)
+                    result_release.dataColumn = tColumn[column1_index-1]
+                    result_release.dataRow = row_release
+                    result_release.display(qp, self.getCoordX, self.getCoordY)
+            result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\nThis chessman can't fighting allied chessmans\n")
             self.update()
         elif result_press != None and not(result_press.isJumpRight(column_release, row_release, self.find)):
             result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\nThis chessman can't jumping over other chessmans\n")
