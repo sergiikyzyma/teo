@@ -22,6 +22,8 @@ class Chessman():
         self.__name__ = "Chessman"
     def __del__(self):
         self.dataPresent = False
+    def __repr__(self):
+        return f"{self.__name__}, {self.dataColumn}, {self.dataRow}, {self.dataColour}"
     def getColumn(self):
         return self.dataColumn
     def getRow(self):
@@ -322,6 +324,9 @@ class Chess(QWidget):
         self.stepsChessmans = []
         self.AI_White = False
         self.AI_Black = False
+        self.danger = False
+        self.victory_white = False
+        self.victory_black = False
         self.setWindowTitle("The chess")
         self.setFixedSize(800, 800)
         menubar = QMenuBar(self)
@@ -479,7 +484,14 @@ class Chess(QWidget):
         self.AI_Black = True
 
     def ai_steping(self, qp, chessman):
-        mychessman_ai = random.choice(chessman)
+        ch_list = [ch for ch in chessman if self.is_dangerous(ch.dataColumn, ch.dataRow)]
+        Chessman("A", 1, Qt.white).errorMessage(qp, self.getCoordX, self.getCoordY, f"Dangerous of the shah for {ch_list}")
+        if ch_list == []:
+            mychessman_ai = random.choice(chessman)
+        elif ch_list != [] and [ch for ch in ch_list if ch.__name__ == "King"] != []:
+            mychessman_ai = [ch for ch in ch_list if ch.__name__ == "King"].pop(0)
+        else:
+            mychessman_ai = random.choice(ch_list)
         if mychessman_ai != None and self.stepsChessmans != [] and mychessman_ai.dataColour != self.stepsChessmans[-1].dataColour:
             while True:
                 column_ai = random.choice(tColumn)
@@ -500,6 +512,19 @@ class Chess(QWidget):
                 if mychessman_ai.__name__ == "Pawn" and result_ai != None and mychessman_ai.isMoveRight(mychessman_ai.dataColumn, mychessman_ai.dataRow, column_ai, row_ai) and mychessman_ai.isJumpRight(column_ai, row_ai, self.find):
                     mychessman_ai = random.choice(chessman)
             self.move(qp, mychessman_ai, column_ai, row_ai)
+
+    def cheaking_dagerous(self, window, column_release, row_release):
+        if self.is_dangerous(column_release, row_release):
+            dialog = QMessageBox(window)
+            dialog.setWindowTitle("Answer to me")
+            dialog.setModal(True)
+            dialog.setText("Do You wanna change Your step?")
+            dialog.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            returnValue = dialog.exec_()
+            if returnValue == QMessageBox.Ok:
+                self.danger = True
+            if returnValue == QMessageBox.Cancel:
+                self.danger = False
 
     def help(self):
         box = QMessageBox(self)
@@ -539,15 +564,16 @@ class Chess(QWidget):
         column_release = self.setCoordX(self.release_pos.x())
         row_release = self.setCoordY(self.release_pos.y())
         result_press = self.find(column_press, row_press)
+        #self.cheaking_dagerous(self, column_release, row_release)
         if result_press != None and self.stepsChessmans != [] and result_press.dataColour != self.stepsChessmans[-1].dataColour:
             self.move(qp, result_press, column_release, row_release)
         elif result_press != None and self.stepsChessmans == [] and result_press.dataColour == Qt.white:
             self.move(qp, result_press, column_release, row_release)
-        elif result_press == None and self.AI_White and not self.AI_Black and mychessman_white != []:
+        elif self.AI_White and not self.AI_Black and mychessman_white != []:
             self.ai_steping(qp, mychessman_white)
-        elif result_press == None and not self.AI_White and self.AI_Black and mychessman_black != []:
+        elif not self.AI_White and self.AI_Black and mychessman_black != []:
             self.ai_steping(qp, mychessman_black)
-        elif result_press == None and self.AI_White and self.AI_Black and mychessman_white != [] and mychessman_black != []:
+        elif self.AI_White and self.AI_Black and mychessman_white != [] and mychessman_black != []:
             self.ai_steping(qp, mychessman_white)
             self.ai_steping(qp, mychessman_black)
         else:
@@ -635,6 +661,7 @@ class Chess(QWidget):
                     self.update()
                 else:
                     result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\n")
+        # -------The castling of the king and the castle-------
         elif result_press != None and result_release != None and result_press.dataColour == result_release.dataColour and result_press.isJumpRight(column_release, row_release, self.find):
             if result_press.__name__ == "King" and result_release.__name__ == "Castle":
                 column1_index = tColumn.index(result_press.dataColumn)
@@ -687,20 +714,23 @@ class Chess(QWidget):
             self.update()
         elif result_press != None and not(result_press.isJumpRight(column_release, row_release, self.find)):
             result_press.errorMessage(qp, self.getCoordX, self.getCoordY, f"This step is incorrectly:\n{result_press.__name__}: {result_press.dataColumn}{result_press.dataRow} - {column_release}{row_release}\nThis chessman can't jumping over other chessmans\n")
-        if result_press.__name__ == "Pawn" and result_press.dataColour == Qt.white and result_press.dataRow == 8:
-            new_result_press = random.choice([Queen(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Bishop(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Castle(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Knight(result_press.dataColumn, result_press.dataRow, result_press.dataColour)])
-            self.dataChessmans.remove(result_press)
-            result_press.__del__()
-            self.dataChessmans.append(new_result_press)
-            new_result_press.display(qp, self.getCoordX, self.getCoordY)
-            self.update()
-        if result_press.__name__ == "Pawn" and result_press.dataColour == Qt.black and result_press.dataRow == 1:
-            new_result_press = random.choice([Queen(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Bishop(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Castle(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Knight(result_press.dataColumn, result_press.dataRow, result_press.dataColour)])
-            self.dataChessmans.remove(result_press)
-            result_press.__del__()
-            self.dataChessmans.append(new_result_press)
-            new_result_press.display(qp, self.getCoordX, self.getCoordY)
-            self.update()
+        # -------The changing of the white pawn on the other chessman-------
+        if result_press in self.dataChessmans:
+            if result_press.__name__ == "Pawn" and result_press.dataColour == Qt.white and result_press.dataRow == 8:
+                new_result_press = random.choice([Queen(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Bishop(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Castle(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Knight(result_press.dataColumn, result_press.dataRow, result_press.dataColour)])
+                self.dataChessmans.remove(result_press)
+                result_press.__del__()
+                self.dataChessmans.append(new_result_press)
+                new_result_press.display(qp, self.getCoordX, self.getCoordY)
+                self.update()
+            # -------The changing of the black pawn on the other chessman-------
+            if result_press.__name__ == "Pawn" and result_press.dataColour == Qt.black and result_press.dataRow == 1:
+                new_result_press = random.choice([Queen(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Bishop(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Castle(result_press.dataColumn, result_press.dataRow, result_press.dataColour), Knight(result_press.dataColumn, result_press.dataRow, result_press.dataColour)])
+                self.dataChessmans.remove(result_press)
+                result_press.__del__()
+                self.dataChessmans.append(new_result_press)
+                new_result_press.display(qp, self.getCoordX, self.getCoordY)
+                self.update()
 
     def drawfield(self, qp, column, row):
         oldPen = qp.pen()
@@ -817,6 +847,14 @@ class Chess(QWidget):
         for mychessman in self.dataChessmans:
             if mychessman.dataColumn == column and mychessman.dataRow == row:
                 return mychessman
+
+    def is_dangerous(self, column, row):
+        ch = self.find(column, row)
+        if ch != None:
+            for mychessman in self.dataChessmans:
+                if (mychessman.dataColour != ch.dataColour and mychessman.__name__ == "Pawn" and mychessman.isAttackRight(mychessman.dataColumn, mychessman.dataRow, column, row)) or (mychessman.dataColour != ch.dataColour and mychessman.__name__ != "Pawn" and mychessman.isMoveRight(mychessman.dataColumn, mychessman.dataRow, column, row) and mychessman.isJumpRight(column, row, self.find)):
+                    return True
+        return False
 
 
 def main():

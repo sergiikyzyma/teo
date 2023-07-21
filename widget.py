@@ -317,7 +317,6 @@ class MainWindow(QMainWindow):
     def f_about(self, oldwindow):
         dialog = QMessageBox(oldwindow)
         dialog.setWindowTitle("About me")
-        dialog.resize(250, 250)
         dialog.setModal(True)
         dialog.setText("The program by Teosoph Geliebter")
         dialog.exec_()
